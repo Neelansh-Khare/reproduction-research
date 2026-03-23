@@ -1,0 +1,17 @@
+[project]
+name = "lost-in-the-middle-reproduction"
+version = "0.1.0"
+description = "Reproduction study for Lost in the Middle: How Language Models Use Long Contexts"
+requires-python = ">=3.10"
+readme = "README.md"
+license = { text = "MIT" }
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+

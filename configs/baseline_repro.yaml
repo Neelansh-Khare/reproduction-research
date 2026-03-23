@@ -1,0 +1,26 @@
+seed: 1234
+
+dataset:
+  path: data/sample_position_eval.jsonl
+  limit: 8
+
+prompt:
+  system_instruction: |
+    You are a careful assistant. Answer the question using the provided context.
+    Output must match the exact answer text.
+  passage_format: |
+    [{{index}}] {{passage}}
+
+model:
+  type: heuristic
+  # The baseline heuristic model intentionally "reads" only the beginning and end
+  # portions of the context to simulate lost-in-the-middle behavior.
+  read_beginning_n_passages: 1
+  read_end_n_passages: 1
+
+eval:
+  position_buckets: [beginning, early-middle, late-middle, end]
+
+output:
+  base_dir: outputs/baseline_repro
+
