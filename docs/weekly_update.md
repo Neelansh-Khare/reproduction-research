@@ -9,12 +9,16 @@
 
 ## Week 2 (baseline stability + reproducibility)
 
-- Implemented (or will implement) an end-to-end baseline evaluation runner that:
+- Implemented an end-to-end baseline evaluation runner that:
   - sets deterministic seeds
   - assembles long-context prompts with controlled ordering
   - computes EM and token-level F1
   - saves per-example predictions and aggregate metrics
   - records the resolved config used for each run
+- **Completed Baseline Reproduction (`baseline_repro`):**
+  - Confirmed the qualitative "Lost in the Middle" U-shaped performance curve using a heuristic model.
+  - Achieved 100% EM for `beginning`/`end` positions and 0% EM for `middle` positions, validating the position-controlled assembly logic.
+  - Successfully mapped the reproduction environment to the paper's core claims (see `docs/reproducible_claims.md`).
 
 ## Connection to independent RAG work (position sensitivity at scale)
 
