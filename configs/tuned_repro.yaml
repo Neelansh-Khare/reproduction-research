@@ -1,0 +1,25 @@
+seed: 1234
+
+dataset:
+  path: data/sample_position_eval.jsonl
+  limit: 8
+
+prompt:
+  system_instruction: |
+    You are a careful assistant. Answer the question using the provided context.
+    Output must match the exact answer text.
+  passage_format: |
+    [{{index}}] {{passage}}
+
+model:
+  type: heuristic
+  # Tunning reading window to see the shift in results.
+  # If we increase the window, "early-middle" might become readable.
+  read_beginning_n_passages: 2
+  read_end_n_passages: 1
+
+eval:
+  position_buckets: [beginning, early-middle, late-middle, end]
+
+output:
+  base_dir: outputs/tuned_repro

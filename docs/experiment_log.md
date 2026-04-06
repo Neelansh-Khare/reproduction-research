@@ -48,9 +48,25 @@ Use this checklist for every run you want to share or defend.
 - [x] Identify failure patterns (heuristic model only reads ends)
 - [x] Record any deviations from the planned experimental recipe (None)
 
-## 7. Results Summary (baseline_repro)
+## 8. Results Summary (tuned_repro - Apr 5)
 
-- Overall EM: 0.5
-- Overall F1: 0.5
-- Qualitative match to "Lost in the Middle" (U-shape) confirmed.
+- **Config:** `configs/tuned_repro.yaml`
+- **Changes:** `read_beginning_n_passages: 2` (up from 1)
+- **Overall EM:** 0.75
+- **Overall F1:** 0.75
+- **Shift observed:** Performance in the `early-middle` bucket shifted from 0.0 to 1.0 because the supporting passage at index 1 now falls within the model's "reading window".
+
+## 9. Query Shift Results Table
+
+| Run ID | read_begin | read_end | Overall EM | Beginning | Early-Middle | Late-Middle | End |
+|---|---|---|---|---|---|---|---|
+| baseline_repro | 1 | 1 | 0.50 | 1.0 | 0.0 | 0.0 | 1.0 |
+| tuned_repro | 2 | 1 | 0.75 | 1.0 | 1.0 | 0.0 | 1.0 |
+
+## 10. Gap Analysis (Reproduction vs. Paper)
+
+- **Mechanism Gap:** The original paper observes "lost in the middle" as a property of transformer attention and training data distribution. Our reproduction uses a **heuristic model** that hard-codes this behavior via a "reading window".
+- **Quantitative Gap:** While we reproduce the *qualitative* U-shape (high performance at extremes, low in middle), our absolute numbers (0.0 vs 1.0) are more extreme than the paper's (where middle performance is often non-zero but degraded).
+- **Hyperparameter Sensitivity:** Tuning `read_beginning_n_passages` directly controls the width of the "beginning" plateau. In real LLMs, this "window" is not a fixed number of passages but an emergent property of the context length and model capacity.
+- **Conclusion:** The environment successfully validates the **context assembly and evaluation pipeline**. To close the gap, the next phase should replace the `heuristic` model with an actual LLM (e.g., via OpenAI or HuggingFace API) to see if the U-shape emerges naturally without being hard-coded.
 
