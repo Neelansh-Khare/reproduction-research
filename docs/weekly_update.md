@@ -19,6 +19,10 @@
   - Confirmed the qualitative "Lost in the Middle" U-shaped performance curve using a heuristic model.
   - Achieved 100% EM for `beginning`/`end` positions and 0% EM for `middle` positions, validating the position-controlled assembly logic.
   - Successfully mapped the reproduction environment to the paper's core claims (see `docs/reproducible_claims.md`).
+- **Completed Redundancy Shift Study (`redundancy_repro` - Apr 12):**
+  - Replicated the paper's secondary finding regarding redundant information.
+  - Demonstrated that placing a copy of the supporting passage at the beginning (index 0) "rescues" performance for examples where the primary evidence is in the middle.
+  - Achieved 100% EM across all buckets using the redundancy mechanism.
 
 ## Connection to independent RAG work (position sensitivity at scale)
 

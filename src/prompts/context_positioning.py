@@ -35,6 +35,7 @@ def assemble_passages(
     supporting_passage: str,
     distractor_passages: list[str],
     support_position: SupportPosition,
+    use_redundancy: bool = False,
 ) -> Tuple[list[str], int]:
     """
     Assemble the full list of passages while placing the supporting passage
@@ -44,11 +45,18 @@ def assemble_passages(
     support_idx = get_support_insertion_index(total, support_position)
 
     ordered: list[str] = ["" for _ in range(total)]
-    ordered[support_idx] = supporting_passage
+    
+    # Track indices where the supporting passage is placed.
+    support_indices = {support_idx}
+    if use_redundancy:
+        support_indices.add(0)
+    
+    for idx in support_indices:
+        ordered[idx] = supporting_passage
 
     cursor = 0
     for i in range(total):
-        if i == support_idx:
+        if i in support_indices:
             continue
         ordered[i] = distractor_passages[cursor]
         cursor += 1
@@ -68,6 +76,7 @@ def build_full_prompt(
     example: PositionEvalExample,
     system_instruction: str,
     passage_format: str,
+    use_redundancy: bool = False,
 ) -> str:
     """
     Build a deterministic prompt with a controlled passage order.
@@ -76,6 +85,7 @@ def build_full_prompt(
         supporting_passage=example.supporting_passage,
         distractor_passages=example.distractor_passages,
         support_position=example.support_position,
+        use_redundancy=use_redundancy,
     )
 
     parts: list[str] = []

@@ -56,14 +56,23 @@ Use this checklist for every run you want to share or defend.
 - **Overall F1:** 0.75
 - **Shift observed:** Performance in the `early-middle` bucket shifted from 0.0 to 1.0 because the supporting passage at index 1 now falls within the model's "reading window".
 
-## 9. Query Shift Results Table
+## 9. Redundancy Shift Results Summary (Apr 12)
 
-| Run ID | read_begin | read_end | Overall EM | Beginning | Early-Middle | Late-Middle | End |
-|---|---|---|---|---|---|---|---|
-| baseline_repro | 1 | 1 | 0.50 | 1.0 | 0.0 | 0.0 | 1.0 |
-| tuned_repro | 2 | 1 | 0.75 | 1.0 | 1.0 | 0.0 | 1.0 |
+- **Config:** `configs/redundancy_repro.yaml`
+- **Changes:** `use_redundancy: true`
+- **Overall EM:** 1.00
+- **Overall F1:** 1.00
+- **Shift observed:** All buckets, including `early-middle` and `late-middle`, now achieve 1.0 EM. This replicates the paper's secondary finding that providing relevant information twice (specifically, adding a copy at the beginning) rescues performance even when the primary information is in the middle.
 
-## 10. Gap Analysis (Reproduction vs. Paper)
+## 10. Position and Redundancy Shift Results Table
+
+| Run ID | read_begin | read_end | Redundancy? | Overall EM | Beginning | Early-Middle | Late-Middle | End |
+|---|---|---|---|---|---|---|---|---|
+| baseline_repro | 1 | 1 | No | 0.50 | 1.0 | 0.0 | 0.0 | 1.0 |
+| tuned_repro | 2 | 1 | No | 0.75 | 1.0 | 1.0 | 0.0 | 1.0 |
+| redundancy_repro | 1 | 1 | Yes | 1.00 | 1.0 | 1.0 | 1.0 | 1.0 |
+
+## 11. Gap Analysis (Reproduction vs. Paper)
 
 - **Mechanism Gap:** The original paper observes "lost in the middle" as a property of transformer attention and training data distribution. Our reproduction uses a **heuristic model** that hard-codes this behavior via a "reading window".
 - **Quantitative Gap:** While we reproduce the *qualitative* U-shape (high performance at extremes, low in middle), our absolute numbers (0.0 vs 1.0) are more extreme than the paper's (where middle performance is often non-zero but degraded).

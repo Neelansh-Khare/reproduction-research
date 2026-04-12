@@ -48,6 +48,31 @@ def test_assemble_passages_bucket_indices() -> None:
     assert sorted(ordered) == sorted([supporting] + distractors)
 
 
+def test_assemble_passages_redundancy() -> None:
+    supporting = "SUPPORT"
+    distractors = ["D1", "D2", "D3", "D4"]
+    
+    # Place at late-middle (index 3) AND at beginning (index 0)
+    ordered, support_idx = assemble_passages(
+        supporting_passage=supporting,
+        distractor_passages=distractors,
+        support_position="late-middle",
+        use_redundancy=True,
+    )
+    
+    assert support_idx == 3
+    assert ordered[0] == supporting
+    assert ordered[3] == supporting
+    assert len(ordered) == 5
+    
+    # Check that we only have 3 distractors used (D1, D2, D3) and D4 is omitted
+    # OR whatever the implementation does. My implementation uses distractors[0], distractors[1], distractors[2]
+    assert ordered[1] == "D1"
+    assert ordered[2] == "D2"
+    assert ordered[4] == "D3"
+    assert "D4" not in ordered
+
+
 def test_build_full_prompt_includes_numbering() -> None:
     example = PositionEvalExample(
         id="ex1",
@@ -68,4 +93,3 @@ def test_build_full_prompt_includes_numbering() -> None:
     assert "[5] " in prompt
     assert example.supporting_passage in prompt
     assert example.query in prompt
-

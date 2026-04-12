@@ -27,6 +27,7 @@ def evaluate_examples(
     examples: list[PositionEvalExample],
     system_instruction: str,
     passage_format: str,
+    use_redundancy: bool,
     seed: int,
 ) -> list[dict[str, Any]]:
     per_example: list[dict[str, Any]] = []
@@ -36,6 +37,7 @@ def evaluate_examples(
             example=ex,
             system_instruction=system_instruction,
             passage_format=passage_format,
+            use_redundancy=use_redundancy,
         )
         prediction = model.generate(prompt, seed=seed)
 
@@ -52,6 +54,7 @@ def evaluate_examples(
                 "answer": ex.answer,
                 "support_position": ex.support_position,
                 "support_passage_index": support_idx,
+                "use_redundancy": use_redundancy,
                 "prediction": prediction,
                 "exact_match": em,
                 "token_f1": f1,
@@ -79,6 +82,7 @@ def run_from_config(config_path: str | Path, *, run_name: str) -> Path:
         )
     )
     passage_format = str(prompt_cfg.get("passage_format", "[{{index}}] {{passage}}"))
+    use_redundancy = bool(prompt_cfg.get("use_redundancy", False))
 
     model_cfg = cfg.get("model", {})
     model = build_model_from_config(model_cfg)
@@ -99,6 +103,7 @@ def run_from_config(config_path: str | Path, *, run_name: str) -> Path:
     logger = setup_logging(run_dir, run_name=run_name)
     logger.info("Loaded config and set deterministic seed.")
     logger.info("Dataset path: %s", dataset_path)
+    logger.info("Use redundancy: %s", use_redundancy)
 
     examples = load_position_eval_jsonl(dataset_path)
 
@@ -112,6 +117,7 @@ def run_from_config(config_path: str | Path, *, run_name: str) -> Path:
         examples=examples,
         system_instruction=system_instruction,
         passage_format=passage_format,
+        use_redundancy=use_redundancy,
         seed=seed,
     )
 
