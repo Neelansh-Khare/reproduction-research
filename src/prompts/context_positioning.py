@@ -36,12 +36,30 @@ def assemble_passages(
     distractor_passages: list[str],
     support_position: SupportPosition,
     use_redundancy: bool = False,
+    num_distractors: int | None = None,
 ) -> Tuple[list[str], int]:
     """
     Assemble the full list of passages while placing the supporting passage
     at the index corresponding to `support_position`.
+
+    If `num_distractors` is provided, the distractor list is truncated or 
+    cycled to match that count (Noise Shift extension).
     """
-    total = 1 + len(distractor_passages)
+    if num_distractors is None:
+        num_distractors = len(distractor_passages)
+    
+    # Noise Shift: truncate or cycle distractors to reach target count
+    if num_distractors == 0:
+        effective_distractors = []
+    elif num_distractors <= len(distractor_passages):
+        effective_distractors = distractor_passages[:num_distractors]
+    else:
+        # Cycle to fill if we need more than we have
+        effective_distractors = []
+        for i in range(num_distractors):
+            effective_distractors.append(distractor_passages[i % len(distractor_passages)])
+
+    total = 1 + len(effective_distractors)
     support_idx = get_support_insertion_index(total, support_position)
 
     ordered: list[str] = ["" for _ in range(total)]
@@ -58,7 +76,7 @@ def assemble_passages(
     for i in range(total):
         if i in support_indices:
             continue
-        ordered[i] = distractor_passages[cursor]
+        ordered[i] = effective_distractors[cursor]
         cursor += 1
 
     return ordered, support_idx
@@ -77,6 +95,7 @@ def build_full_prompt(
     system_instruction: str,
     passage_format: str,
     use_redundancy: bool = False,
+    num_distractors: int | None = None,
 ) -> str:
     """
     Build a deterministic prompt with a controlled passage order.
@@ -86,6 +105,7 @@ def build_full_prompt(
         distractor_passages=example.distractor_passages,
         support_position=example.support_position,
         use_redundancy=use_redundancy,
+        num_distractors=num_distractors,
     )
 
     parts: list[str] = []

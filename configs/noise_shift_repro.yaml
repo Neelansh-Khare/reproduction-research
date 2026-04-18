@@ -1,0 +1,26 @@
+seed: 1234
+
+dataset:
+  path: data/sample_position_eval.jsonl
+  limit: 8
+
+prompt:
+  system_instruction: |
+    You are a careful assistant. Answer the question using the provided context.
+    Output must match the exact answer text.
+  passage_format: |
+    [{{index}}] {{passage}}
+  num_distractors: 10
+
+model:
+  type: heuristic
+  # With 10 distractors (11 total), middle positions (index 3 and 7) 
+  # are well outside the default [0] and [10] windows.
+  read_beginning_n_passages: 1
+  read_end_n_passages: 1
+
+eval:
+  position_buckets: [beginning, early-middle, late-middle, end]
+
+output:
+  base_dir: outputs/noise_shift_repro

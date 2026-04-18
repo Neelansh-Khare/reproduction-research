@@ -27,3 +27,10 @@
 5. Smoke-test baseline end-to-end
    - Run baseline + confirm outputs and metrics files exist
 
+## Week 3 (Extensions + Independent Research)
+
+1. Design and implement the “Noise Shift” extension experiment (Apr 19)
+   - Add capability to inject variable noise (distractors) into the context
+   - Goal: Observe how increasing context "noise" (distractor count) shifts the model's ability to locate middle-ground evidence
+   - Define the extension mechanism in `src/prompts/context_positioning.py`
+

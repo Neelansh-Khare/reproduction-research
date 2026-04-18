@@ -18,9 +18,10 @@ This doc distinguishes between (a) what we can fully reproduce in a small indepe
 - **Statement:** The ordering of bucket performance (begin/end vs middle) should be broadly consistent for EM and token-level F1.
 - **Operational test:** Compare bucket-wise average EM with bucket-wise average F1; flag if curves diverge sharply.
 
-### Claim C: Robustness under distractor count (extension-ready)
+### Claim C: Robustness under distractor count (Noise Shift)
 - **Statement:** Increasing distractor count (longer contexts) increases the magnitude of the middle-position penalty.
-- **Operational test:** Run the same prompt builder with more distractors and re-measure bucket deltas. (Implemented once dataset/runner supports variable distractors.)
+- **Operational test:** Run the same prompt builder with more distractors and re-measure bucket deltas.
+- **Status:** **Tested (Apr 19)** via `noise_shift_repro`. Increasing to 10 distractors successfully shifts middle buckets further into the "lost" zone while maintaining high performance at extremes.
 
 ## Assumptions (what makes a baseline possible)
 

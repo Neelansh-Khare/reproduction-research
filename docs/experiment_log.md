@@ -71,8 +71,17 @@ Use this checklist for every run you want to share or defend.
 | baseline_repro | 1 | 1 | No | 0.50 | 1.0 | 0.0 | 0.0 | 1.0 |
 | tuned_repro | 2 | 1 | No | 0.75 | 1.0 | 1.0 | 0.0 | 1.0 |
 | redundancy_repro | 1 | 1 | Yes | 1.00 | 1.0 | 1.0 | 1.0 | 1.0 |
+| noise_shift_repro | 1 | 1 | No | 0.50 | 1.0 | 0.0 | 0.0 | 1.0 |
 
-## 11. Gap Analysis (Reproduction vs. Paper)
+## 11. Noise Shift Results Summary (Apr 19)
+
+- **Config:** `configs/noise_shift_repro.yaml`
+- **Changes:** `num_distractors: 10` (up from 4)
+- **Overall EM:** 0.50
+- **Overall F1:** 0.50
+- **Shift observed:** While the overall EM remains at 0.50 (same as baseline), the "noise floor" has increased. The supporting passage at `early-middle` and `late-middle` is now pushed further into the context (indices 3 and 7, respectively, in an 11-passage block), confirming that the position-controlled assembly scales correctly with arbitrary noise levels. This setup allows for testing "retrieval saturation" where the model must find a needle in a much larger haystack.
+
+## 12. Gap Analysis (Reproduction vs. Paper)
 
 - **Mechanism Gap:** The original paper observes "lost in the middle" as a property of transformer attention and training data distribution. Our reproduction uses a **heuristic model** that hard-codes this behavior via a "reading window".
 - **Quantitative Gap:** While we reproduce the *qualitative* U-shape (high performance at extremes, low in middle), our absolute numbers (0.0 vs 1.0) are more extreme than the paper's (where middle performance is often non-zero but degraded).

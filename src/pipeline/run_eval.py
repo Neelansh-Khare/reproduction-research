@@ -28,6 +28,7 @@ def evaluate_examples(
     system_instruction: str,
     passage_format: str,
     use_redundancy: bool,
+    num_distractors: int | None,
     seed: int,
 ) -> list[dict[str, Any]]:
     per_example: list[dict[str, Any]] = []
@@ -38,13 +39,18 @@ def evaluate_examples(
             system_instruction=system_instruction,
             passage_format=passage_format,
             use_redundancy=use_redundancy,
+            num_distractors=num_distractors,
         )
         prediction = model.generate(prompt, seed=seed)
 
         em = exact_match(prediction, ex.answer)
         f1 = token_level_f1(prediction, ex.answer)
 
-        num_passages = 1 + len(ex.distractor_passages)
+        # For reporting, calculate the actual insertion index used
+        actual_distractor_count = (
+            num_distractors if num_distractors is not None else len(ex.distractor_passages)
+        )
+        num_passages = 1 + actual_distractor_count
         support_idx = get_support_insertion_index(num_passages, ex.support_position)
 
         per_example.append(
@@ -55,6 +61,7 @@ def evaluate_examples(
                 "support_position": ex.support_position,
                 "support_passage_index": support_idx,
                 "use_redundancy": use_redundancy,
+                "num_distractors": actual_distractor_count,
                 "prediction": prediction,
                 "exact_match": em,
                 "token_f1": f1,
@@ -83,6 +90,9 @@ def run_from_config(config_path: str | Path, *, run_name: str) -> Path:
     )
     passage_format = str(prompt_cfg.get("passage_format", "[{{index}}] {{passage}}"))
     use_redundancy = bool(prompt_cfg.get("use_redundancy", False))
+    num_distractors = prompt_cfg.get("num_distractors")
+    if num_distractors is not None:
+        num_distractors = int(num_distractors)
 
     model_cfg = cfg.get("model", {})
     model = build_model_from_config(model_cfg)
@@ -104,6 +114,7 @@ def run_from_config(config_path: str | Path, *, run_name: str) -> Path:
     logger.info("Loaded config and set deterministic seed.")
     logger.info("Dataset path: %s", dataset_path)
     logger.info("Use redundancy: %s", use_redundancy)
+    logger.info("Num distractors override: %s", num_distractors)
 
     examples = load_position_eval_jsonl(dataset_path)
 
@@ -118,6 +129,7 @@ def run_from_config(config_path: str | Path, *, run_name: str) -> Path:
         system_instruction=system_instruction,
         passage_format=passage_format,
         use_redundancy=use_redundancy,
+        num_distractors=num_distractors,
         seed=seed,
     )
 
