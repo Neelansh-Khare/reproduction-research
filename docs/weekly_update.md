@@ -24,6 +24,14 @@
   - Demonstrated that placing a copy of the supporting passage at the beginning (index 0) "rescues" performance for examples where the primary evidence is in the middle.
   - Achieved 100% EM across all buckets using the redundancy mechanism.
 
+## Week 7 (Extension + Results Synthesis - Apr 26)
+
+- **Completed Noise Shift Extension Study (`noise_shift_repro`):**
+  - Scaled the context length by increasing the number of distractor passages to 10 (11 total passages per prompt).
+  - Successfully verified that the "Lost in the Middle" effect scales with longer contexts: middle buckets (now at indices 3 and 7) still exhibit 0% EM, while extremes (0 and 10) remain at 100% EM.
+  - Drafted results figures and synthesized the bucket-wise performance table (see `docs/experiment_log.md`).
+- **Synthesis:** The experimental framework is now robust enough to test arbitrary context lengths and redundancy policies. The qualitative reproduction of the paper's main claims is complete within the heuristic baseline.
+
 ## Connection to independent RAG work (position sensitivity at scale)
 
 Long-context position sensitivity is a natural fit for RAG settings where:

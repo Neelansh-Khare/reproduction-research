@@ -73,13 +73,36 @@ Use this checklist for every run you want to share or defend.
 | redundancy_repro | 1 | 1 | Yes | 1.00 | 1.0 | 1.0 | 1.0 | 1.0 |
 | noise_shift_repro | 1 | 1 | No | 0.50 | 1.0 | 0.0 | 0.0 | 1.0 |
 
-## 11. Noise Shift Results Summary (Apr 19)
+## 11. Noise Shift Results Summary (Apr 26 - Week 7)
 
 - **Config:** `configs/noise_shift_repro.yaml`
-- **Changes:** `num_distractors: 10` (up from 4)
+- **Changes:** `num_distractors: 10` (total 11 passages)
 - **Overall EM:** 0.50
 - **Overall F1:** 0.50
-- **Shift observed:** While the overall EM remains at 0.50 (same as baseline), the "noise floor" has increased. The supporting passage at `early-middle` and `late-middle` is now pushed further into the context (indices 3 and 7, respectively, in an 11-passage block), confirming that the position-controlled assembly scales correctly with arbitrary noise levels. This setup allows for testing "retrieval saturation" where the model must find a needle in a much larger haystack.
+- **Run Directory:** `outputs/noise_shift_repro/noise_shift_repro_seed1234_20260426_233303/`
+- **Shift observed:** Performance in the `early-middle` and `late-middle` buckets remains at 0.0, while `beginning` and `end` remain at 1.0. This confirms the "lost in the middle" effect scales with longer contexts (11 passages). The support indices for middle buckets shifted to 3 and 7 (from 1 and 3 in the baseline), demonstrating that the positioning logic correctly handles arbitrary context lengths.
+
+### Extension Results Table (Week 7)
+
+| Bucket | Support Index | EM | F1 |
+|---|---|---|---|
+| Beginning | 0 | 1.0 | 1.0 |
+| Early-Middle | 3 | 0.0 | 0.0 |
+| Late-Middle | 7 | 0.0 | 0.0 |
+| End | 10 | 1.0 | 1.0 |
+
+### Visualization (Draft)
+
+```
+EM Score by Position Bucket (10 distractors)
+1.0 | ####                ####
+    | ####                ####
+0.5 | ####                ####
+    | ####                ####
+0.0 | ####  ____    ____  ####
+    +---------------------------
+      Beg   E-Mid   L-Mid  End
+```
 
 ## 12. Gap Analysis (Reproduction vs. Paper)
 

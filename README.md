@@ -47,5 +47,7 @@ This reproduction baseline is designed to inform later RAG-focused work by:
 
 ## Status
 
-- Week 1–2 goal: a stable baseline environment (deterministic runs, saved configs, and smoke-tested prompt/dataset behavior).
+- **Baseline Reproduction:** Completed. The environment successfully reproduces the qualitative "lost-in-the-middle" curve using a heuristic baseline.
+- **Redundancy Extension:** Completed. Verified that redundant information at the beginning rescues performance for middle-position evidence.
+- **Noise Shift Extension:** Completed (Apr 26). Verified that the position-sensitivity mechanism scales correctly to longer context lengths (11 passages).
 
