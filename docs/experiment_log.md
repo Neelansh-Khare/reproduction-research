@@ -111,3 +111,5 @@ EM Score by Position Bucket (10 distractors)
 - **Hyperparameter Sensitivity:** Tuning `read_beginning_n_passages` directly controls the width of the "beginning" plateau. In real LLMs, this "window" is not a fixed number of passages but an emergent property of the context length and model capacity.
 - **Conclusion:** The environment successfully validates the **context assembly and evaluation pipeline**. To close the gap, the next phase should replace the `heuristic` model with an actual LLM (e.g., via OpenAI or HuggingFace API) to see if the U-shape emerges naturally without being hard-coded.
 
+See [Extension Analysis](extension_analysis.md) for a detailed synthesis of context scaling and redundancy effects.
+

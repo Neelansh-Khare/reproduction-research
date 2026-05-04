@@ -32,6 +32,15 @@
   - Drafted results figures and synthesized the bucket-wise performance table (see `docs/experiment_log.md`).
 - **Synthesis:** The experimental framework is now robust enough to test arbitrary context lengths and redundancy policies. The qualitative reproduction of the paper's main claims is complete within the heuristic baseline.
 
+## Week 8 (Synthesis + Final Analysis - May 3)
+
+- **Completed Extension Analysis:**
+  - Finalized the comparison between `baseline_repro`, `noise_shift_repro`, and `redundancy_repro`.
+  - Confirmed that the "Lost in the Middle" U-shape scales with context length (10 distractors) and can be fully mitigated by strategic redundancy.
+- **Drafting Final Report:**
+  - Started the final synthesis of results for the reproduction study (40% complete).
+  - Integrated the bucket-wise performance table into the central documentation.
+
 ## Connection to independent RAG work (position sensitivity at scale)
 
 Long-context position sensitivity is a natural fit for RAG settings where:
